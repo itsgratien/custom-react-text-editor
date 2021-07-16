@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './CustomEditor.scss';
-import { Editor, EditorState } from 'draft-js';
+import { Editor, EditorState, RichUtils } from 'draft-js';
 import {
   faItalic,
   faBold,
@@ -34,23 +34,51 @@ const CustomEditor = (props: Props) => {
     setEditorState(value);
   };
 
+  const handleKeyCommand = (command: string, value: EditorState): any => {
+    const newState = RichUtils.handleKeyCommand(value, command);
+
+    if (newState) {
+      setEditorState(newState);
+    }
+
+    return undefined;
+  };
+
   return (
     <div
       className='customTextEditor relative w-full h-full flex flex-col items-center justify-center'
       style={{ height: height || '500px' }}
     >
       <EditorAction
-        items={['heading', 'paragraph', 'bold', 'italic', 'link', 'code']}
+        items={[
+          {
+            name: 'heading',
+            command: '',
+          },
+          {
+            name: 'paragraph',
+            command: 'paragraph',
+          },
+          { name: 'bold', command: 'bold' },
+          { name: 'italic', command: 'italic' },
+          { name: 'link', command: '' },
+          { name: 'code', command: 'code' },
+        ]}
+        handleKeyCommand={(command) =>
+          command && handleKeyCommand(command, editorState)
+        }
       />
       <div
-        className={`editorContent relative w-full flex-1 mt-8 ${
-          editorState ? 'text-center' : ''
+        className={`editorContent relative w-full flex-1 mt-10 pl-10 pr-10 ${
+          !editorState.getCurrentContent().hasText() ? 'text-center' : ''
         }`}
       >
         <Editor
           editorState={editorState}
           onChange={handleOnChange}
           placeholder='Start typing anything'
+          spellCheck
+          handleKeyCommand={handleKeyCommand}
         />
       </div>
     </div>
