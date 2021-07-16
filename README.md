@@ -1,2 +1,2 @@
 # custom-react-text-editor
-Text Editor that is built on top of draft JS using React
+a text editor that is built on top of draft JS using React
