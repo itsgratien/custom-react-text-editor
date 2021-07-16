@@ -3,5 +3,11 @@
     .public-DraftEditorPlaceholder-inner{
         color: #C8C8C8;
         font-size: 20px;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+        pointer-events: none;
+        top: 0;
+        margin-top: -5px;
     }
 }
