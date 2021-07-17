@@ -72,6 +72,16 @@ const EditorAction = (props: Props) => {
     return undefined;
   };
 
+  const handleCode = () => {
+    handleActiveAction(Action.Code);
+
+    if (handleBlockType) {
+      handleBlockType('code-block');
+    }
+
+    return undefined;
+  };
+
   return (
     <ul className='relative flex items-center editorAction'>
       {activeAction === Action.Heading && handleBlockType && openSubAction && (
@@ -142,7 +152,7 @@ const EditorAction = (props: Props) => {
           className={`outline-none focus:outline-none ${
             activeAction === Action.Code ? 'activeAction' : ''
           }`}
-          onClick={() => handleActiveAction(Action.Code)}
+          onClick={handleCode}
         >
           <FontAwesomeIcon icon={['fas', Action.Code]} />
         </button>
