@@ -62,6 +62,16 @@ const EditorAction = (props: Props) => {
     }
   };
 
+  const handleParagraph = () => {
+    handleActiveAction(Action.Paragraph);
+
+    if (handleBlockType) {
+      handleBlockType('paragraph');
+    }
+
+    return undefined;
+  };
+
   return (
     <ul className='relative flex items-center editorAction'>
       {activeAction === Action.Heading && handleBlockType && openSubAction && (
@@ -88,9 +98,7 @@ const EditorAction = (props: Props) => {
           className={`outline-none focus:outline-none ${
             activeAction === Action.Paragraph ? 'activeAction' : ''
           }`}
-          onClick={() =>
-            handleActiveAction(Action.Paragraph, Command.Paragraph)
-          }
+          onClick={handleParagraph}
         >
           <FontAwesomeIcon icon={['fas', Action.Paragraph]} />
         </button>
