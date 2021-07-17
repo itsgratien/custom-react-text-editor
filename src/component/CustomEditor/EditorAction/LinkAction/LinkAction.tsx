@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, MouseEvent } from 'react';
 import './LinkAction.scss';
 import { Close } from '../Close';
 
@@ -8,11 +8,13 @@ interface Props {
 }
 
 const LinkAction = (props: Props) => {
-  const [link, setLink] = useState<string>('');
+  const [link, setLink] = useState<string>('https://igihe.com');
 
   const { handleClose, handleToggleLink } = props;
 
-  const handleLink = () => {
+  const handleLink = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
     if (link && link.length > 0) {
       handleToggleLink(link);
     }

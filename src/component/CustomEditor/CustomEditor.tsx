@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './CustomEditor.scss';
-import { Editor, EditorState, RichUtils, Modifier } from 'draft-js';
+import { Editor, EditorState, RichUtils, Entity } from 'draft-js';
 import { EditorAction } from './EditorAction';
 
 interface Props {
@@ -41,13 +41,9 @@ const CustomEditor = (props: Props) => {
   const handleToggleLink = (url: string) => {
     const contentState = editorState.getCurrentContent();
 
-    const selectionState = editorState.getSelection();
-
-    console.log(selectionState.getAnchorKey());
-
     const contentStateWithEntity = contentState.createEntity(
       'LINK',
-      'IMMUTABLE',
+      'MUTABLE',
       {
         url,
       }
@@ -55,18 +51,18 @@ const CustomEditor = (props: Props) => {
 
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
 
-    const contentStateWithLink = Modifier.applyEntity(
-      contentStateWithEntity,
-      selectionState,
+    const newEditorState = EditorState.set(editorState, {
+      currentContent: contentStateWithEntity,
+    });
+
+    const newState = RichUtils.toggleLink(
+      newEditorState,
+      newEditorState.getSelection(),
       entityKey
     );
 
-    const newEditorState = EditorState.set(editorState, {
-      currentContent: contentStateWithLink,
-    });
-
-    if (newEditorState) {
-      setEditorState(newEditorState);
+    if (newState) {
+      setEditorState(newState);
     }
 
     return undefined;
@@ -75,7 +71,7 @@ const CustomEditor = (props: Props) => {
   return (
     <div
       className='customTextEditor relative w-full h-full flex flex-col items-center justify-center'
-      style={{ height: height || '500px' }}
+      style={{ height: height || 'auto' }}
     >
       <EditorAction
         handleKeyCommand={(command) =>
