@@ -12,6 +12,7 @@ import {
   faCode,
 } from '@fortawesome/free-solid-svg-icons';
 import { HeadingAction } from './HeadingAction';
+import { LinkAction } from './LinkAction';
 
 library.add(faItalic);
 library.add(faBold);
@@ -22,7 +23,7 @@ library.add(faCode);
 
 interface Props {
   handleKeyCommand: (command?: string) => void;
-  handleBlockType?: (command: string) => void;
+  handleBlockType: (command: string) => void;
 }
 
 enum Action {
@@ -57,6 +58,10 @@ const EditorAction = (props: Props) => {
       case Action.Heading:
         setOpenSubAction(true);
         break;
+
+      case Action.Link:
+        setOpenSubAction(true);
+        break;
       default:
         setOpenSubAction(false);
     }
@@ -65,9 +70,7 @@ const EditorAction = (props: Props) => {
   const handleParagraph = () => {
     handleActiveAction(Action.Paragraph);
 
-    if (handleBlockType) {
-      handleBlockType('paragraph');
-    }
+    handleBlockType('paragraph');
 
     return undefined;
   };
@@ -75,21 +78,22 @@ const EditorAction = (props: Props) => {
   const handleCode = () => {
     handleActiveAction(Action.Code);
 
-    if (handleBlockType) {
-      handleBlockType('code-block');
-    }
+    handleBlockType('code-block');
 
     return undefined;
   };
 
   return (
     <ul className='relative flex items-center editorAction'>
-      {activeAction === Action.Heading && handleBlockType && openSubAction && (
+      {activeAction === Action.Heading && openSubAction && (
         <HeadingAction
           handleActiveAction={handleActiveAction}
           handleBlockType={handleBlockType}
           handleClose={() => setOpenSubAction(false)}
         />
+      )}
+      {activeAction === Action.Link && openSubAction && (
+        <LinkAction handleClose={() => setOpenSubAction(false)} />
       )}
       <li>
         <button

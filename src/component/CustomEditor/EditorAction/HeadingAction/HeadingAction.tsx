@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import './HeadingAction.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-
-library.add(faTimes);
+import { Close } from '../Close';
 
 const items = [
   { name: 'H1', command: 'header-one' },
@@ -37,12 +33,7 @@ const HeadingAction = (props: Props) => {
   };
   return (
     <div className='headingAction absolute w-full h-full inset-0 z-50'>
-      <button
-        className='outline-none focus:outline-none font-bold absolute right-0 closeChildAction flex items-center justify-center'
-        onClick={handleClose}
-      >
-        <FontAwesomeIcon icon={['fas', 'times']} />
-      </button>
+      <Close handleClose={handleClose} />
       <ul className='flex items-center justify-center'>
         {items.map((item, index) => (
           <li key={index}>
