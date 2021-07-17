@@ -4,12 +4,21 @@ import { Close } from '../Close';
 
 interface Props {
   handleClose: () => void;
+  handleToggleLink: (value: string) => void;
 }
 
 const LinkAction = (props: Props) => {
   const [link, setLink] = useState<string>('');
 
-  const { handleClose } = props;
+  const { handleClose, handleToggleLink } = props;
+
+  const handleLink = () => {
+    if (link && link.length > 0) {
+      handleToggleLink(link);
+    }
+
+    return undefined;
+  };
 
   return (
     <div className='linkAction absolute -inset-0 w-full h-full z-50'>
@@ -27,6 +36,7 @@ const LinkAction = (props: Props) => {
           <button
             type='button'
             className='outline-none focus:outline-none font-bold'
+            onClick={handleLink}
           >
             Link
           </button>

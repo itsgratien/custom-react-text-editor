@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './CustomEditor.scss';
-import { Editor, EditorState, RichUtils } from 'draft-js';
+import { Editor, EditorState, RichUtils, Modifier } from 'draft-js';
 import { EditorAction } from './EditorAction';
 
 interface Props {
@@ -38,6 +38,40 @@ const CustomEditor = (props: Props) => {
     return undefined;
   };
 
+  const handleToggleLink = (url: string) => {
+    const contentState = editorState.getCurrentContent();
+
+    const selectionState = editorState.getSelection();
+
+    console.log(selectionState.getAnchorKey());
+
+    const contentStateWithEntity = contentState.createEntity(
+      'LINK',
+      'IMMUTABLE',
+      {
+        url,
+      }
+    );
+
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+
+    const contentStateWithLink = Modifier.applyEntity(
+      contentStateWithEntity,
+      selectionState,
+      entityKey
+    );
+
+    const newEditorState = EditorState.set(editorState, {
+      currentContent: contentStateWithLink,
+    });
+
+    if (newEditorState) {
+      setEditorState(newEditorState);
+    }
+
+    return undefined;
+  };
+
   return (
     <div
       className='customTextEditor relative w-full h-full flex flex-col items-center justify-center'
@@ -48,6 +82,7 @@ const CustomEditor = (props: Props) => {
           command && handleKeyCommand(command, editorState)
         }
         handleBlockType={handleBlockType}
+        handleToggleLink={handleToggleLink}
       />
       <div
         className={`editorContent relative w-full flex-1 mt-10 pl-10 pr-10 ${

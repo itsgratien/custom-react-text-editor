@@ -24,6 +24,7 @@ library.add(faCode);
 interface Props {
   handleKeyCommand: (command?: string) => void;
   handleBlockType: (command: string) => void;
+  handleToggleLink: (value: string) => void;
 }
 
 enum Action {
@@ -47,7 +48,7 @@ const EditorAction = (props: Props) => {
 
   const [openSubAction, setOpenSubAction] = useState<boolean>(false);
 
-  const { handleKeyCommand, handleBlockType } = props;
+  const { handleKeyCommand, handleBlockType, handleToggleLink } = props;
 
   const handleActiveAction = (value: IconName | string, command?: string) => {
     setActiveAction(value as IconName);
@@ -93,7 +94,10 @@ const EditorAction = (props: Props) => {
         />
       )}
       {activeAction === Action.Link && openSubAction && (
-        <LinkAction handleClose={() => setOpenSubAction(false)} />
+        <LinkAction
+          handleClose={() => setOpenSubAction(false)}
+          handleToggleLink={handleToggleLink}
+        />
       )}
       <li>
         <button
